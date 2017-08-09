@@ -134,7 +134,7 @@ class NewCommand extends Command
                 break;
         }
 
-        $response = (new Client)->get('https://github.com/apilaravue/apilaravue/archive/.$filename');
+        $response = (new Client)->get('https://github.com/apilaravue/apilaravue/archive/'.$filename);
 
         file_put_contents($zipFile, $response->getBody());
 
