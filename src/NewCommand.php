@@ -62,6 +62,7 @@ class NewCommand extends Command
         $composer = $this->findComposer();
 
         $commands = [
+            $composer.' install --no-scripts',
             'cd backend',
             $composer.' install --no-scripts',
             $composer.' run-script post-root-package-install',
