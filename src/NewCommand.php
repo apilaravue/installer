@@ -94,7 +94,7 @@ class NewCommand extends Command
             'npm install',
         ];
 
-        $commands = array_merge($commandsBackend, $commandsServer, $commandsFrontend)
+        $commands = array_merge($commandsBackend, $commandsServer, $commandsFrontend);
 
         $commands[] = 'cd ..';
 
