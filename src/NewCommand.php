@@ -56,8 +56,8 @@ class NewCommand extends Command
 
         $this->download($zipFile = $this->makeFilename(), $version)
              ->extract($zipFile, $directory)   
-             ->cleanUp($zipFile, $directory);
-             ->prepareWritableDirectories($directory, $output)
+             ->cleanUp($zipFile, $directory)
+             ->prepareWritableDirectories($directory, $output);
 
         $composer = $this->findComposer();
 
