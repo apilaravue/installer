@@ -50,7 +50,7 @@ class NewCommand extends Command
             $this->verifyApplicationDoesntExist($directory);
         }
 
-        $output->writeln('<info>Crafting application... : '.$directory.'/.. </info> ');
+        $output->writeln('<info>Crafting application...</info>');
 
         $version = $this->getVersion($input);
 
@@ -175,7 +175,7 @@ class NewCommand extends Command
         if ($directory !== getcwd()) {
             $files = scandir($directory.'/apilaravue-master');
             $oldfolder = $directory.'/apilaravue-master/';
-            $newfolder = $directory.'/..';
+            $newfolder = $directory;
             foreach($files as $fname) {
                 if($fname != '.' && $fname != '..') {
                     rename($oldfolder.$fname, $newfolder.$fname);
