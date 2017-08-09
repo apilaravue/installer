@@ -55,9 +55,9 @@ class NewCommand extends Command
         $version = $this->getVersion($input);
 
         $this->download($zipFile = $this->makeFilename(), $version)
-             ->extract($zipFile, $directory)
+             ->extract($zipFile, $directory)   
+             ->cleanUp($zipFile, $directory);
              ->prepareWritableDirectories($directory, $output)
-             ->cleanUp($zipFile);
 
         $composer = $this->findComposer();
 
@@ -127,14 +127,14 @@ class NewCommand extends Command
     {
         switch ($version) {
             case 'develop':
-                $filename = 'latest-develop.zip';
+                $filename = 'master.zip';
                 break;
             case 'master':
-                $filename = 'latest.zip';
+                $filename = 'master.zip';
                 break;
         }
 
-        $response = (new Client)->get('http://cabinet.apilaravue.com/'.$filename);
+        $response = (new Client)->get('https://github.com/apilaravue/apilaravue/archive/'.$filename);
 
         file_put_contents($zipFile, $response->getBody());
 
@@ -167,11 +167,21 @@ class NewCommand extends Command
      * @param  string  $zipFile
      * @return $this
      */
-    protected function cleanUp($zipFile)
+    protected function cleanUp($zipFile, $directory)
     {
         @chmod($zipFile, 0777);
 
         @unlink($zipFile);
+        if ($directory !== getcwd()) {
+            $files = scandir($directory.'/apilaravue-master');
+            $oldfolder = $directory.'/apilaravue-master/';
+            $newfolder = $directory.'/..';
+            foreach($files as $fname) {
+                if($fname != '.' && $fname != '..') {
+                    rename($oldfolder.$fname, $newfolder.$fname);
+                }
+            }    
+        }
 
         return $this;
     }
@@ -188,10 +198,10 @@ class NewCommand extends Command
         $filesystem = new Filesystem;
 
         try {
-            $filesystem->chmod($appDirectory.DIRECTORY_SEPARATOR."bootstrap/cache", 0755, 0000, true);
-            $filesystem->chmod($appDirectory.DIRECTORY_SEPARATOR."storage", 0755, 0000, true);
+            $filesystem->chmod($appDirectory.DIRECTORY_SEPARATOR."backend/bootstrap/cache", 0755, 0000, true);
+            $filesystem->chmod($appDirectory.DIRECTORY_SEPARATOR."backend/storage", 0755, 0000, true);
         } catch (IOExceptionInterface $e) {
-            $output->writeln('<comment>You should verify that the "storage" and "bootstrap/cache" directories are writable.</comment>');
+            $output->writeln('<comment>You should verify that the "backend/storage" and "backend/bootstrap/cache" directories are writable.</comment>');
         }
 
         return $this;
