@@ -62,6 +62,7 @@ class NewCommand extends Command
         $composer = $this->findComposer();
 
         $commands = [
+            'cd backend',
             $composer.' install --no-scripts',
             $composer.' run-script post-root-package-install',
             $composer.' run-script post-install-cmd',
@@ -79,6 +80,8 @@ class NewCommand extends Command
                 return $value.' --no-ansi';
             }, $commands);
         }
+
+        $commands[] = 'cd ..';
 
         $process = new Process(implode(' && ', $commands), $directory, null, null, null);
 
@@ -180,7 +183,8 @@ class NewCommand extends Command
                 if($fname != '.' && $fname != '..') {
                     rename($oldfolder.$fname, $newfolder.$fname);
                 }
-            }    
+            }
+            rmdir($directory.'/apilaravue-master/');
         }
 
         return $this;
