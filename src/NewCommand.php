@@ -127,14 +127,14 @@ class NewCommand extends Command
     {
         switch ($version) {
             case 'develop':
-                $filename = 'latest-develop.zip';
+                $filename = 'master.zip';
                 break;
             case 'master':
-                $filename = 'latest.zip';
+                $filename = 'master.zip';
                 break;
         }
 
-        $response = (new Client)->get('http://cabinet.apilaravue.com/'.$filename);
+        $response = (new Client)->get('https://github.com/apilaravue/apilaravue/archive/.$filename');
 
         file_put_contents($zipFile, $response->getBody());
 
