@@ -50,7 +50,7 @@ class NewCommand extends Command
             $this->verifyApplicationDoesntExist($directory);
         }
 
-        $output->writeln('<info>Crafting application...</info>');
+        $output->writeln('<info>Crafting application... : '.$directory.'/.. </info> ');
 
         $version = $this->getVersion($input);
 
