@@ -61,26 +61,40 @@ class NewCommand extends Command
 
         $composer = $this->findComposer();
 
-        $commands = [
+        $commandsBackend = [
             $composer.' install --no-scripts',
             'cd backend',
             $composer.' install --no-scripts',
             $composer.' run-script post-root-package-install',
             $composer.' run-script post-install-cmd',
             $composer.' run-script post-create-project-cmd',
+            'mv .env.example .env',
+
         ];
 
         if ($input->getOption('dev')) {
-            unset($commands[2]);
+            unset($commandsBackend[3]);
 
-            $commands[] = $composer.' run-script post-autoload-dump';
+            $commandsBackend[] = $composer.' run-script post-autoload-dump';
         }
 
         if ($input->getOption('no-ansi')) {
-            $commands = array_map(function ($value) {
+            $commandsBackend = array_map(function ($value) {
                 return $value.' --no-ansi';
-            }, $commands);
+            }, $commandsBackend);
         }
+
+        $commandsServer = [
+            'cd ../server',
+            'npm install',
+        ];
+
+        $commandsFrontend = [
+            'cd ../frontend',
+            'npm install',
+        ];
+
+        $commands = array_merge($commandsBackend, $commandsServer, $commandsFrontend)
 
         $commands[] = 'cd ..';
 
@@ -94,7 +108,7 @@ class NewCommand extends Command
             $output->write($line);
         });
 
-        $output->writeln('<comment>Application ready! Build something amazing.</comment>');
+        $output->writeln('<comment>Apilaravue application ready! Build something great.</comment>');
     }
 
     /**
